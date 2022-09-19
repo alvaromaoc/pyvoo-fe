@@ -1,15 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
 
-  public static tokenStorage = 'pyvoo_token'
+  public static tokenStorage = 'pyvoo_token';
 
-  private baseUrl = 'http://localhost:8080'
+  private baseUrl = environment.server;
 
   constructor(protected httpClient: HttpClient) { }
 

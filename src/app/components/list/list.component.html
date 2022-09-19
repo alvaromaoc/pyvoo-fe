@@ -1,0 +1,46 @@
+<div *ngIf="list" class="container mt-2 mt-md-5">
+  <h1>{{ list.name }}</h1>
+  <p>{{ list.description }}</p>
+  <div *ngIf="list.owner.username | checkUser" class="form-check form-switch mb-2">
+    <input #switchState (click)="changeState(switchState.checked ? listStates.OPENED : listStates.CLOSED)"
+           [checked]="list.listState === listStates.OPENED" class="form-check-input" id="flexSwitchCheckDefault"
+           role="switch"
+           type="checkbox">
+    <label class="form-check-label"
+           for="flexSwitchCheckDefault">{{ list.listState === listStates.OPENED ? 'Opened' : 'Closed'}}</label>
+  </div>
+  <form (submit)="submit()" *ngIf="list.listState === listStates.OPENED" [formGroup]="formGroupParticipant"
+        class="w-100 d-flex flex-row">
+    <input class="form-control" formControlName="name" placeholder="Name" style="flex: 1" type="text">
+    <button [disabled]="formGroupParticipant.invalid" class="btn btn-primary ms-2" type="submit">Submit</button>
+  </form>
+  <hr>
+  <div class="progress mb-2" style="height: 2px;">
+    <div [ngClass]="{
+         'bg-success': (participants.length / list.maxParticipants * 100) < 50,
+         'bg-warning': (participants.length / list.maxParticipants * 100) >= 50 && (participants.length / list.maxParticipants * 100) < 80,
+         'bg-danger': (participants.length / list.maxParticipants * 100) >= 80
+         }" [style.width]="(participants.length / list.maxParticipants * 100) + '%'" aria-label="Example 1px high"
+         aria-valuemax="100"
+         aria-valuemin="0" aria-valuenow="25" class="progress-bar"
+         role="progressbar"></div>
+  </div>
+  <div *ngIf="list.owner.username | checkUser" class="w-100 d-flex flex-row mb-2">
+    <input #maxParticipants [value]="list.maxParticipants" class="form-control" min="0" placeholder="Max participants"
+           style="flex: 1" type="number">
+    <button (click)="changeMaxParticipants(maxParticipants.value)" class="btn btn-primary ms-2">Change max</button>
+  </div>
+  <ul class="list-group">
+    <li class="text-muted bg-light list-group-item d-flex justify-content-between">
+      <span>Participants</span>
+      <span class="w-100 d-flex justify-content-end text-muted">{{ participants.length }}
+        /{{ list.maxParticipants }}</span>
+    </li>
+    <li *ngFor="let participant of participants" class="list-group-item d-flex justify-content-between">
+      {{ participant.name }}
+      <em (click)="removeParticipant(participant.idParticipant)" *ngIf="list.owner.username | checkUser"
+          class="bi bi-trash-fill"
+          style="cursor: pointer"></em>
+    </li>
+  </ul>
+</div>

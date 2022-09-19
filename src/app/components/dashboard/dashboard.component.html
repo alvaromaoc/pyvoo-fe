@@ -1,0 +1,55 @@
+<div class="w-100 h-100 bg-light p-2 p-md-5">
+  <div class="container">
+    <h1 class="display-5 fw-bold">Pyvoo</h1>
+    <p class="fs-4">The best way to manage people lists</p>
+  </div>
+  <div *ngIf="!((authorities.LIST_ADM | checkAuthority) || (authorities.SUPER_ADM | checkAuthority))" class="container">
+    <form (submit)="login()" [formGroup]="loginFormGroup">
+      <div class="input-group">
+        <input class="form-control" formControlName="username" placeholder="username" type="text">
+        <input class="form-control" formControlName="password" placeholder="password" type="password">
+        <button [disabled]="loginFormGroup.invalid" class="btn btn-primary" type="submit">Login</button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="authorities.LIST_ADM | checkAuthority" class="container my-2">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Create new lists</h5>
+        <h6 class="card-subtitle mb-2 text-muted">New list creation tool</h6>
+        <p class="card-text">List will be accessible and editable after creation</p>
+        <form (submit)="createList()" [formGroup]="listFormGroup">
+          <label class="form-label" for="listName">List name</label>
+          <input class="form-control mb-2" formControlName="name" id="listName" placeholder="List name" type="text">
+          <label class="form-label" for="listDescription">List description</label>
+          <textarea class="form-control mb-2" formControlName="description" id="listDescription"
+                    placeholder="List description"></textarea>
+          <label class="form-label" for="maxParticipants">Max participants</label>
+          <input class="form-control mb-2" formControlName="maxParticipants" id="maxParticipants" min="0"
+                 placeholder="Max participants"
+                 type="number">
+          <button [disabled]="listFormGroup.invalid" class="btn btn-primary mt-2" type="submit">Create</button>
+        </form>
+      </div>
+    </div>
+    <div class="list-group mt-2">
+      <a *ngFor="let list of lists" [routerLink]="[list.idList]" class="list-group-item list-group-item-action">
+        {{ list.name }}
+      </a>
+    </div>
+  </div>
+  <div *ngIf="authorities.SUPER_ADM | checkAuthority" class="card container my-2">
+    <div class="card-body">
+      <h5 class="card-title">Create new users</h5>
+      <h6 class="card-subtitle mb-2 text-muted">New user creation tool</h6>
+      <p class="card-text">All users will be created with <strong>list administration authority</strong></p>
+      <form (submit)="signup()" [formGroup]="loginFormGroup">
+        <div class="input-group">
+          <input class="form-control" formControlName="username" placeholder="username" type="text">
+          <input class="form-control" formControlName="password" placeholder="password" type="password">
+          <button [disabled]="loginFormGroup.invalid" class="btn btn-primary" type="submit">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

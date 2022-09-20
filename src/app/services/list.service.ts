@@ -30,4 +30,8 @@ export class ListService extends HttpService {
   public getByOwner(loggedUsername: any) {
     return this.get(`${this.serviceUrl}/collection?ownerUsername=${loggedUsername}`);
   }
+
+  public removeById(idList: number): Observable<List> {
+    return this.delete(`${this.serviceUrl}?idList=${idList}`);
+  }
 }

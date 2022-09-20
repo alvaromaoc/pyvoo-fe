@@ -30,9 +30,11 @@ export class ListComponent implements OnInit, OnDestroy {
 
   formGroupParticipant: FormGroup;
 
-  constructor(private listSvc: ListService,
-              private participantSvc: ParticipantService,
-              private route: ActivatedRoute) {
+  constructor(
+    private listSvc: ListService,
+    private participantSvc: ParticipantService,
+    private route: ActivatedRoute
+  ) {
     this.formGroupParticipant = new FormGroup<any>({
       name: new FormControl(null, Validators.required)
     })

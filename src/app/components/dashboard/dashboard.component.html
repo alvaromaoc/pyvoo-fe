@@ -1,9 +1,11 @@
-<div class="w-100 h-100 bg-light p-2 p-md-5">
+<div class="p-2 p-md-5">
   <div class="container">
     <h1 class="display-5 fw-bold">Pyvoo</h1>
     <p class="fs-4">The best way to manage people lists</p>
   </div>
-  <div *ngIf="!((authorities.LIST_ADM | checkAuthority) || (authorities.SUPER_ADM | checkAuthority))" class="container">
+  <div
+    *ngIf="!((authorities.LIST_ADM | checkAuthority) || (authorities.SUPER_ADM | checkAuthority)); else logoutTemplate"
+    class="container">
     <form (submit)="login()" [formGroup]="loginFormGroup">
       <div class="input-group">
         <input class="form-control" formControlName="username" placeholder="username" type="text">
@@ -12,6 +14,11 @@
       </div>
     </form>
   </div>
+  <ng-template #logoutTemplate>
+    <div class="container">
+      <button (click)="logout()" class="btn btn-danger">Logout</button>
+    </div>
+  </ng-template>
   <div *ngIf="authorities.LIST_ADM | checkAuthority" class="container my-2">
     <div class="card">
       <div class="card-body">
@@ -33,9 +40,16 @@
       </div>
     </div>
     <div class="list-group mt-2">
-      <a *ngFor="let list of lists" [routerLink]="[list.idList]" class="list-group-item list-group-item-action">
-        {{ list.name }}
-      </a>
+      <span *ngFor="let list of lists"
+            class="list-group-item list-group-item-action d-flex flex-row align-items-center">
+        <div [routerLink]="[list.idList]" class="d-flex flex-column" style="flex: 1; cursor: pointer">
+          <strong>{{ list.name }}</strong>
+          <span>{{ list.description }}</span>
+        </div>
+        <em (click)="removeList(list.idList)" *ngIf="list.owner.username | checkUser"
+            class="bi bi-trash-fill"
+            style="cursor: pointer"></em>
+      </span>
     </div>
   </div>
   <div *ngIf="authorities.SUPER_ADM | checkAuthority" class="card container my-2">

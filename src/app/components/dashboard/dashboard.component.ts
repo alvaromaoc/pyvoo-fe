@@ -70,4 +70,18 @@ export class DashboardComponent implements OnInit {
       maxParticipants: this.listFormGroup.value.maxParticipants
     } as List;
   }
+
+  logout() {
+    this.httpService.logout().then(() => {
+      location.reload();
+    });
+  }
+
+  removeList(idList: number) {
+    this.listSvc.removeById(idList).subscribe(() => {
+      this.listSvc.getByOwner(this.httpService.getLoggedUsername()).subscribe(res => {
+        this.lists = res;
+      })
+    })
+  }
 }

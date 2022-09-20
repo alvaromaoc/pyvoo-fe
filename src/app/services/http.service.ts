@@ -58,4 +58,11 @@ export class HttpService {
     }
     return {};
   }
+
+  public logout(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      localStorage.clear();
+      resolve();
+    })
+  }
 }
